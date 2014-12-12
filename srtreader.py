@@ -24,7 +24,7 @@ def read_srt(filename):
                 txt = ""
                 state = NR
             else:
-                if txt != "": txt += "\n"
+                if txt != "": txt += " "
                 txt += line
 
     pname = os.path.splitext(os.path.basename(filename))[0]

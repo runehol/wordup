@@ -1,5 +1,4 @@
 
-#import nltk.data
 import nltk.tokenize
 
 
@@ -8,9 +7,7 @@ def tokenize(data):
     blocks = data[1]
 
     sent_tokenize = nltk.tokenize.sent_tokenize
-    #word_tokenize = nltk.tokenize.word_tokenize
 
-    #tokenizer = nltk.tokenize.RegexpTokenizer(u"[\s.,-_?!'\"،؟\d]+", gaps=True)
     tokenizer = nltk.tokenize.RegexpTokenizer(u"[\s\.,-?!'\"،؟\d]+", gaps=True)
     word_tokenize = tokenizer.tokenize
 

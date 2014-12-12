@@ -18,7 +18,6 @@ class UniqueWords:
 
         uw.reg_word(word, sentence, blockname, textname)
         
-        
 
 class UniqueWord:
 
@@ -43,7 +42,13 @@ class UniqueWord:
     def repr_word(self):
         t = self.get_variants()
         if len(t):
-            return t[0][1]
+            # try to get a lower-case word if possible
+            idx = 0
+            while idx < len(t) - 1 and t[idx][1].istitle():
+                idx += 1
+                
+            
+            return t[idx][1]
 
 
     def get_example(self):
@@ -62,17 +67,22 @@ def uniquify(tokens, lang):
 
 
 
-def rank(unique_words):
+def rank(unique_words, lang, known_words):
     t = [(uw.count, uw.stem, uw) for uw in unique_words.stems.values()]
     t.sort(reverse=True)
     accum_count = 0
     word_count = unique_words.word_count
+    scalefac = 100.0/word_count
     for entry in t:
         uw = entry[2]
         count = uw.count
-        word, sentence, blockname, textname = uw.get_example()
-        accum_percent = 100.0*accum_count/word_count
-        
-        print("%.2f\t%d\t%s\t%s\t%s" % (accum_percent, count, word, sentence, uw.get_variants()))
+
+        if uw.stem not in known_words:
+            variants = uw.get_variants()
+            if lang.is_interesting(variants):
+                word, sentence, blockname, textname = uw.get_example()
+                accum_percent = scalefac*accum_count
+            
+                print("%.2f\t%.2f\t%s\t%s\t%s" % (accum_percent, count*scalefac, word, sentence, uw.get_variants()))
 
         accum_count += count

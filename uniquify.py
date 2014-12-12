@@ -83,6 +83,6 @@ def rank(unique_words, lang, known_words):
                 word, sentence, blockname, textname = uw.get_example()
                 accum_percent = scalefac*accum_count
             
-                print("%.2f\t%.2f\t%s\t%s\t%s" % (accum_percent, count*scalefac, word, sentence, uw.get_variants()))
+                print("%.2f\t%.2f\t%s\t%s\t%s\t%s\t%s" % (accum_percent, count*scalefac, word, sentence, blockname, textname, uw.get_variants()))
 
         accum_count += count

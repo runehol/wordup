@@ -16,9 +16,9 @@ def tokenize(data):
         blockname = block[0]
         text = block[1]
         sentences = sent_tokenize(text.strip())
-        print(sentences)
+#        print(sentences)
         for sentence in sentences:
             words = word_tokenize(sentence)
-            print(words)
+#            print(words)
             for word in words:
-                yield (word, sentence, blockname, textnmae)
+                yield (word, sentence, blockname, textname)

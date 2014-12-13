@@ -26,6 +26,17 @@ class UniqueWords:
 
 
 
+    def weed_out_uninteresting_words(self, lang):
+        for stem in list(self.stems.keys()):
+            uw = self.stems[stem]
+
+            variants = uw.get_variants()
+            if not lang.is_interesting(variants):
+                self.word_count -= uw.count
+                del self.stems[stem]
+        
+
+        
     def num_unique_words(self):
         return len(self.stems)
 
@@ -98,12 +109,9 @@ def rank(unique_words, lang, known_words):
         count = uw.count
 
         if uw.stem not in known_words:
-            variants = uw.get_variants()
-            if lang.is_interesting(variants):
-                word, sentence, blockname, textname = uw.get_example()
-                accum_percent = scalefac*accum_count
-                percent = count*scalefac
-                table_entries.append( (accum_percent, percent, word, sentence, textname, blockname) )
+            accum_percent = scalefac*accum_count
+            percent = count*scalefac
+            table_entries.append( (accum_percent, percent, uw) )
 
 
         accum_count += count
@@ -122,5 +130,7 @@ def rank(unique_words, lang, known_words):
     for i in range(len(thresholds)):
         print("%5d word families necessary to reach %3.0f%% coverage, %5d of them unknown to you" % (words_to_thresholds[i], 100.0*thresholds[i], unknown_to_thresholds[i]))
 
-    for (accum_percent, percent, word, sentence, textname, blockname) in table_entries:
+    for (accum_percent, percent, uw) in table_entries:
+        word, sentence, blockname, textname = uw.get_example()
+        #print("%.2f\t%.3f\t%s\t%s" % (accum_percent, percent, word, uw.stem))
         print("%.2f\t%.3f\t%s\t%s\t%s %s" % (accum_percent, percent, word, sentence, textname, blockname))

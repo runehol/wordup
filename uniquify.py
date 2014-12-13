@@ -85,10 +85,12 @@ def rank(unique_words, lang, known_words):
     table_entries = []
 
 
-    threshold = 0.95
-    int_threshold = int(math.ceil(threshold*word_count))
-    words_to_threshold = -1
-    unknown_to_threshold = -1
+    thresholds = [0.80, 0.85, 0.90, 0.95, 1.0]
+    thresholds.sort()
+    int_thresholds = [int(math.ceil(threshold*word_count)) for threshold in thresholds]
+    words_to_thresholds = [0]*len(thresholds)
+    unknown_to_thresholds = [0]*len(thresholds)
+    threshold_idx = 0
 
 
     for idx, entry in enumerate(t):
@@ -105,9 +107,10 @@ def rank(unique_words, lang, known_words):
 
 
         accum_count += count
-        if words_to_threshold == -1 and accum_count >= int_threshold:
-            words_to_threshold = idx
-            unknown_to_threshold = len(table_entries)
+        if threshold_idx < len(thresholds) and accum_count >= int_thresholds[threshold_idx]:
+            words_to_thresholds[threshold_idx] = idx+1
+            unknown_to_thresholds[threshold_idx] = len(table_entries)
+            threshold_idx += 1
 
 
 
@@ -116,8 +119,8 @@ def rank(unique_words, lang, known_words):
         words_per_family = float(word_count)/num_unique_words
 
     print("%d word families over %d words, %.1f words per family" % (num_unique_words, word_count, words_per_family))
-    if words_to_threshold != -1:
-        print("%d word families necessary to reach %.0f%% coverage, %d of them unknown to you" % (words_to_threshold, 100.0*threshold, unknown_to_threshold))
+    for i in range(len(thresholds)):
+        print("%5d word families necessary to reach %3.0f%% coverage, %5d of them unknown to you" % (words_to_thresholds[i], 100.0*thresholds[i], unknown_to_thresholds[i]))
 
     for (accum_percent, percent, word, sentence, textname, blockname) in table_entries:
         print("%.2f\t%.3f\t%s\t%s\t%s %s" % (accum_percent, percent, word, sentence, textname, blockname))

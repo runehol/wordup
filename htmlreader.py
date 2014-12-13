@@ -5,8 +5,21 @@ class TextExtractParser(HTMLParser):
     def __init__(self):
         super().__init__()
         self.items = []
+        self.ignore_level = 0
+        self.ignore_tags = set(["style", "script"])
+
+    def handle_starttag(self, tag, attrs):
+        if tag in self.ignore_tags:
+            self.ignore_level += 1
+
+    def handle_endtag(self, tag):
+        if tag in self.ignore_tags:
+            self.ignore_level -= 1
+
     def handle_data(self, data):
-        self.items.append(data)
+        if self.ignore_level == 0:
+            self.items.append(data)
+
 
 def parse_html(pname, content):
 

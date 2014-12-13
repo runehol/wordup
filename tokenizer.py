@@ -6,7 +6,7 @@ def tokenize(data):
 
     sent_tokenize = nltk.tokenize.sent_tokenize
 
-    tokenizer = nltk.tokenize.RegexpTokenizer(u"[\s\.,-?!'\"،؟\d·•—()×«]+", gaps=True)
+    tokenizer = nltk.tokenize.RegexpTokenizer(u"[\s\.,-?!'\"،؟\d·•—()×«»%]+", gaps=True)
     word_tokenize = tokenizer.tokenize
 
     

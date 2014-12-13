@@ -2,6 +2,8 @@
 
 import srtreader
 import txtreader
+import epubreader
+import htmlreader
 import os.path
 
 
@@ -17,7 +19,10 @@ def read_file(fname):
         return srtreader.read_file(fname)
 
     elif ext == ".epub":
-        pass
+        return epubreader.read_file(fname)
+
+    elif ext == ".html" or ext == ".xhtml" or ext == ".htm":
+        return htmlreader.read_file(fname)
 
     elif ext == ".txt":
         return txtreader.read_file(fname)

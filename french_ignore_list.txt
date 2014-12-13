@@ -53,3 +53,5 @@ madame
 monsieur
 OK
 super
+étaient
+car

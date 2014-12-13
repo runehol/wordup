@@ -11,9 +11,20 @@ class FrenchModule:
 
 
     def is_interesting(self, variants):
+
+
         #frequency, word
-        if len(variants) > 1: return True
-        count, word = variants[0]
-        if not word.istitle(): return True
-        if count <= 2: return True
+
+
+        #this filter is aimed at filtering out proper names, because they shouldn't go into vocab lists
+
+        totalcount = 0
+        for count, word in variants:
+            if not word.istitle() and not word.isupper(): return True
+            totalcount += count
+
+
+        if totalcount <= 2: return True
+
+        
         return False

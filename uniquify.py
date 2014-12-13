@@ -76,7 +76,9 @@ def rank(unique_words, lang, known_words):
     t.sort(reverse=True)
     accum_count = 0
     word_count = unique_words.word_count
-    scalefac = 100.0/word_count
+    scalefac = 1.0
+    if word_count > 0:
+        scalefac = 100.0/word_count
 
     num_unique_words = unique_words.num_unique_words()
 
@@ -109,8 +111,13 @@ def rank(unique_words, lang, known_words):
 
 
 
-    print("%d word families over %d words, %.2f words per family" % (num_unique_words, word_count, float(word_count)/num_unique_words))
-    print("%d word families necessary to reach %.0f%% coverage, %d of them unknown to you" % (words_to_threshold, 100.0*threshold, unknown_to_threshold))
+    words_per_family = 0.0
+    if num_unique_words > 0:
+        words_per_family = float(word_count)/num_unique_words
+
+    print("%d word families over %d words, %.1f words per family" % (num_unique_words, word_count, words_per_family))
+    if words_to_threshold != -1:
+        print("%d word families necessary to reach %.0f%% coverage, %d of them unknown to you" % (words_to_threshold, 100.0*threshold, unknown_to_threshold))
 
     for (accum_percent, percent, word, sentence, textname, blockname) in table_entries:
-        print("%.2f\t%.2f\t%s\t%s\t%s %s" % (accum_percent, percent, word, sentence, textname, blockname))
+        print("%.2f\t%.3f\t%s\t%s\t%s %s" % (accum_percent, percent, word, sentence, textname, blockname))

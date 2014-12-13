@@ -6,7 +6,7 @@ def tokenize(data):
 
     sent_tokenize = nltk.tokenize.sent_tokenize
 
-    tokenizer = nltk.tokenize.RegexpTokenizer(u"[\s\.,-?!'\"،؟\d·•—()×«»%]+", gaps=True)
+    tokenizer = nltk.tokenize.RegexpTokenizer(u"[\s\.,-?!'\"،؟\d·•—()×«»%\[\]|↑]+", gaps=True)
     word_tokenize = tokenizer.tokenize
 
     
@@ -15,4 +15,5 @@ def tokenize(data):
         for sentence in sentences:
             words = word_tokenize(sentence)
             for word in words:
-                yield (word, sentence, blockname, textname)
+                if len(word) > 1:
+                    yield (word, sentence, blockname, textname)

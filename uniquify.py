@@ -1,6 +1,6 @@
 
 import collections
-
+import math
 
 class UniqueWords:
     def __init__(self):
@@ -23,6 +23,11 @@ class UniqueWords:
         for (word, sentence, blockname, textname) in tokens:
             stem = lang.stem(word)
             self.reg_word(stem, word, sentence, blockname, textname)
+
+
+
+    def num_unique_words(self):
+        return len(self.stems)
 
 
         
@@ -72,7 +77,19 @@ def rank(unique_words, lang, known_words):
     accum_count = 0
     word_count = unique_words.word_count
     scalefac = 100.0/word_count
-    for entry in t:
+
+    num_unique_words = unique_words.num_unique_words()
+
+    table_entries = []
+
+
+    threshold = 0.95
+    int_threshold = int(math.ceil(threshold*word_count))
+    words_to_threshold = -1
+    unknown_to_threshold = -1
+
+
+    for idx, entry in enumerate(t):
         uw = entry[2]
         count = uw.count
 
@@ -81,7 +98,19 @@ def rank(unique_words, lang, known_words):
             if lang.is_interesting(variants):
                 word, sentence, blockname, textname = uw.get_example()
                 accum_percent = scalefac*accum_count
-            
-                print("%.2f\t%.2f\t%s\t%s\t%s %s" % (accum_percent, count*scalefac, word, sentence, textname, blockname))
+                percent = count*scalefac
+                table_entries.append( (accum_percent, percent, word, sentence, textname, blockname) )
+
 
         accum_count += count
+        if words_to_threshold == -1 and accum_count >= int_threshold:
+            words_to_threshold = idx
+            unknown_to_threshold = len(table_entries)
+
+
+
+    print("%d word families over %d words, %.2f words per family" % (num_unique_words, word_count, float(word_count)/num_unique_words))
+    print("%d word families necessary to reach %.0f%% coverage, %d of them unknown to you" % (words_to_threshold, 100.0*threshold, unknown_to_threshold))
+
+    for (accum_percent, percent, word, sentence, textname, blockname) in table_entries:
+        print("%.2f\t%.2f\t%s\t%s\t%s %s" % (accum_percent, percent, word, sentence, textname, blockname))

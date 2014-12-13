@@ -21,12 +21,12 @@ class TextExtractParser(HTMLParser):
             self.items.append(data)
 
 
-def parse_html(pname, content):
+def parse_html(pname, section, content):
 
     parser = TextExtractParser()
     parser.feed(content)
     for item in parser.items:
-        yield item, "", pname
+        yield item, section, pname
         
 
 def read_file(filename):
@@ -34,6 +34,6 @@ def read_file(filename):
 
     f = open(filename, encoding="utf-8")
     data = f.read()
-    yield from parse_html(pname, data)
+    yield from parse_html(pname, "", data)
 
 

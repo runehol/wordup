@@ -10,7 +10,6 @@ def get_encoding(filename):
         if detector.done: break
     detector.close()
     f.close()
-    print (detector.result)
     return detector.result["encoding"]
 
 

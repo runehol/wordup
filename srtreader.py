@@ -1,7 +1,7 @@
 import os.path
 
 
-def read_srt(filename):
+def read_file(filename):
     f = open(filename, encoding="utf-8")
     blocks = []
 

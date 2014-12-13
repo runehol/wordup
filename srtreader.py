@@ -1,8 +1,24 @@
 import os.path
+from chardet.universaldetector import UniversalDetector
+
+
+def get_encoding(filename):
+    f = open(filename, "rb")
+    detector = UniversalDetector()
+    for line in f.readlines():
+        detector.feed(line)
+        if detector.done: break
+    detector.close()
+    f.close()
+    print (detector.result)
+    return detector.result["encoding"]
 
 
 def read_file(filename):
-    f = open(filename, encoding="utf-8")
+
+    encoding = get_encoding(filename)
+    
+    f = open(filename, encoding=encoding)
     pname = os.path.splitext(os.path.basename(filename))[0]
 
     NR, TIMESTAMP, TEXT = range(3)

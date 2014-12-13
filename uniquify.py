@@ -17,8 +17,15 @@ class UniqueWords:
             self.stems[stem] = uw
 
         uw.reg_word(word, sentence, blockname, textname)
-        
 
+
+    def uniquify(self, tokens, lang):
+        for (word, sentence, blockname, textname) in tokens:
+            stem = lang.stem(word)
+            self.reg_word(stem, word, sentence, blockname, textname)
+
+
+        
 class UniqueWord:
 
     def __init__(self, stem):
@@ -56,14 +63,6 @@ class UniqueWord:
         sentence, blockname, textname = self.word_examples[word]
         return (word, sentence, blockname, textname)
 
-def uniquify(tokens, lang):
-    unique_words = UniqueWords()
-    word_count = 0
-    for (word, sentence, blockname, textname) in tokens:
-        stem = lang.stem(word)
-        unique_words.reg_word(stem, word, sentence, blockname, textname)
-
-    return unique_words
 
 
 

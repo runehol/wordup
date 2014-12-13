@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import sys
-import srtreader
+import filereader
 import tokenizer
 import french
 import uniquify
@@ -13,11 +13,16 @@ def main(argv = sys.argv):
 
 
     known_words = read_known_file.read_known_file("french_known_words.txt", lang) | read_known_file.read_known_file("french_ignore_list.txt", lang)
+
+    uw = uniquify.UniqueWords()
+    for fname in argv[1:]:
     
-    data = srtreader.read_srt(argv[1])
-    tokens = tokenizer.tokenize(data)
-    ut = uniquify.uniquify(tokens, lang)
-    uniquify.rank(ut, lang, known_words)
+        data = filereader.read_file(fname)
+        tokens = tokenizer.tokenize(data)
+    
+        uw.uniquify(tokens, lang)
+
+    uniquify.rank(uw, lang, known_words)
 
 
 

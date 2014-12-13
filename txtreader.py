@@ -5,14 +5,12 @@ def read_file(filename):
     f = open(filename, encoding="utf-8")
     blocks = []
 
+    pname = os.path.splitext(os.path.basename(filename))[0]
 
 
     txt = f.read()
     txt = txt.replace("\n", " ")
     txt = txt.replace("\r", " ")
-    
-    blocks.append(("", txt))
 
-    pname = os.path.splitext(os.path.basename(filename))[0]
+    yield txt, "", pname
 
-    return (pname, blocks)

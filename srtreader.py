@@ -3,7 +3,7 @@ import os.path
 
 def read_file(filename):
     f = open(filename, encoding="utf-8")
-    blocks = []
+    pname = os.path.splitext(os.path.basename(filename))[0]
 
     NR, TIMESTAMP, TEXT = range(3)
     state = NR
@@ -20,13 +20,10 @@ def read_file(filename):
             state = TEXT
         elif state == TEXT:
             if line == "":
-                blocks.append((timestamp, txt))
+                yield txt, timestamp, pname
                 txt = ""
                 state = NR
             else:
                 if txt != "": txt += " "
                 txt += line
 
-    pname = os.path.splitext(os.path.basename(filename))[0]
-
-    return (pname, blocks)

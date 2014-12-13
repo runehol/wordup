@@ -3,7 +3,7 @@ from html.parser import HTMLParser
 
 class TextExtractParser(HTMLParser):
     def __init__(self):
-        super().__init__()
+        super().__init__(convert_charrefs=True)
         self.items = []
         self.ignore_level = 0
         self.ignore_tags = set(["style", "script"])

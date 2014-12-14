@@ -6,6 +6,7 @@ import arabic
 import french
 import uniquify
 import read_known_file
+import errno
 
 
 
@@ -37,5 +38,14 @@ def main(argv = sys.argv):
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except BrokenPipeError:
+        try:
+            sys.stdout.close()
+        except BrokenPipeError:
+            pass
+
+        
+
     

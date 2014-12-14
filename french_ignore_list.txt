@@ -29,7 +29,6 @@ dont
 drogue
 dégage
 e
-enculé
 eu
 euro
 euros
@@ -38,7 +37,6 @@ faire
 fit
 fous
 foutez
-fric 
 frêres
 fut
 général
@@ -62,7 +60,6 @@ musical
 mêre
 n
 ni
-niquer
 oh
 ont
 ous
@@ -106,3 +103,6 @@ vois
 étaient
 étais
 était
+lâ
+comprends
+salut

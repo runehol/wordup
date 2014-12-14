@@ -10,6 +10,10 @@ class ArabicModule:
         self.ar_regexp = re.compile(u"[\u0600-\u06ff]|[\u0750-\u077f]|[\ufb50-\ufc3f]|[\ufe70-\ufefc]")
 
     def stem(self, word):
+
+        # a bit of pre-handling to fix the Levantine dialect convention of writing hal first
+        if len(word) >= 5 and word.startswith("هال"): word = word[1:]
+        
         return self.stemmer.stem(word)
 
 

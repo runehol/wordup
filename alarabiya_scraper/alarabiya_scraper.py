@@ -4,8 +4,16 @@
 from bs4 import BeautifulSoup
 import sys
 import urllib.request
-# http://english.alarabiya.net/en/webtv/news-bulletin/2014/12/11/1300GMT.html
+import http.cookiejar
+import re
 
+
+
+def fetch_alarabiya_cookie(url):
+    webpage = urllib.request.urlopen(url).read()
+    m = re.search(b"setCookie\('([^']*)', '([^']*)'", webpage)
+    if m:
+        return m.group(1).decode("utf-8"), m.group(2).decode("utf-8")
 
 
 
@@ -70,18 +78,24 @@ def extract_and_write_subtitle(elem, fname):
 
 
 def scrape_alarabiya(url, out_stub_name):
-    #webpage = urllib.request.urlopen(url).read()
-    webpage = open("alarabiya_scraper/test.html", "rb").read()
+
+    res = fetch_alarabiya_cookie(url)
+    if not res: raise IOError()
+
+
+
+    cj = http.cookiejar.CookieJar()
+    ck = http.cookiejar.Cookie(version=0, name=res[0], value=res[1], port=None, port_specified=False, domain='english.alarabiya.net', domain_specified=False, domain_initial_dot=False, path='/', path_specified=True, secure=False, expires=None, discard=True, comment=None, comment_url=None, rest={'HttpOnly': None}, rfc2109=False)
+    cj.set_cookie(ck)
+
+    opener = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(cj))
+    r = opener.open(url)
+    webpage = r.read()
 
     soup = BeautifulSoup(webpage)
 
     video_url = None
     
-    t = soup.find('meta', {'property' : 'videoURL'})
-    if t:
-        video_url = t.get('content')
-        print(video_url)
-        #download(video_url, out_stub_name + ".mp4")
 
     t = soup.find('div', {"class" : "jwEn"})
     if t:
@@ -91,8 +105,13 @@ def scrape_alarabiya(url, out_stub_name):
     if t:
         extract_and_write_subtitle(t, out_stub_name + "_ar.srt")
 
+    t = soup.find('meta', {'property' : 'videoURL'})
+    if t:
+        video_url = t.get('content')
+        print(video_url)
+        download(video_url, out_stub_name + ".mp4")
 
 
 
 if __name__ == "__main__":
-    scrape_alarabiya(sys.argv[1], "alarabiya20141211_1300")
+    scrape_alarabiya(sys.argv[1], sys.argv[2])

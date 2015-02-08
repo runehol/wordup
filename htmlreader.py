@@ -26,6 +26,7 @@ def parse_html(pname, section, content):
     parser = TextExtractParser()
     parser.feed(content)
     for item in parser.items:
+        item = item.replace("’", "'")
         yield item, section, pname
         
 

@@ -96,7 +96,7 @@ def rank(unique_words, lang, known_words):
     table_entries = []
 
 
-    thresholds = [0.80, 0.85, 0.90, 0.95, 1.0]
+    thresholds = [0.80, 0.85, 0.90, 0.95, 0.98, 1.0]
     thresholds.sort()
     int_thresholds = [int(math.ceil(threshold*word_count)) for threshold in thresholds]
     words_to_thresholds = [0]*len(thresholds)

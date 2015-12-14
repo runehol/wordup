@@ -4,6 +4,7 @@ import filereader
 import tokenizer
 import arabic
 import french
+import turkish
 import uniquify
 import read_known_file
 import errno
@@ -18,6 +19,10 @@ def main(argv = sys.argv):
         argv = argv[1:]
         lang = arabic.ArabicModule()
         known_words = read_known_file.read_known_file("arabic_known_words.txt", lang) | read_known_file.read_known_file("arabic_ignore_list.txt", lang)
+    elif len(argv) and argv[0] == "--turkish":
+        argv = argv[1:]
+        lang = turkish.TurkishModule()
+        known_words = read_known_file.read_known_file("turkish_known_words.txt", lang) | read_known_file.read_known_file("turkish_ignore_list.txt", lang)
     else:
         lang = french.FrenchModule()
         known_words = read_known_file.read_known_file("french_known_words.txt", lang) | read_known_file.read_known_file("french_ignore_list.txt", lang)
